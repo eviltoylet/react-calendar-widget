@@ -1,0 +1,31 @@
+{
+  "name": "react-calendar-widget",
+  "version": "0.0.1",
+  "description": "A calendar widget for React.js.",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "webpack-dev-server --display-error-details",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eviltoylet/react-calendar-widget.git"
+  },
+  "keywords": [
+    "calendar",
+    "react"
+  ],
+  "author": "Brian Chang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/eviltoylet/react-calendar-widget/issues"
+  },
+  "homepage": "https://github.com/eviltoylet/react-calendar-widget#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "jsx-loader": "^0.13.2",
+    "react": "^0.14.3",
+    "react-dom": "^0.14.3",
+    "webpack": "^1.12.8"
+  }
+}

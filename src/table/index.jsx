@@ -50,7 +50,7 @@ var Table = React.createClass({
                 <td>F</td>
                 <td>S</td>
             </tr>);
-        for (var x = 0; x < 5; x++) {
+        for (var x = 0; x < 6; x++) {
             var tableCols = [];
             for (var y = 0; y < 7; y++) {
                 if (startingDayOfWeek == y) {

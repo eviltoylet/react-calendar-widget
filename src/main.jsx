@@ -7,7 +7,8 @@ var Table = require('./table/');
 // TODO: Consider just passing around the JavaScript Date object
 var CalendarWidget = React.createClass({
     getInitialState: function () {
-        var date = new Date();
+        var today = new Date();
+        var date = today;
         var selectedDate = date;
         var day = date.getDate();
         var month = date.getMonth();
@@ -36,10 +37,8 @@ var CalendarWidget = React.createClass({
             });
         };
 
-        console.log(this.state.date);
-
         return (
-            <div>
+            <div style={{textAlign: "center", display:"inline-block"}}>
                 <Header year={this.state.year} month={this.state.month} updateDate={updateDate}/>
                 <Table year={this.state.year} month={this.state.month} day={this.state.day}/>
             </div>

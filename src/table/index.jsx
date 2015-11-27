@@ -9,16 +9,10 @@ var dayOfWeekForFirstDateInMonth = function (month, year) {
 var isLeapYear = function (year) {
     if (year % 4 == 0) {
         if (year % 100) {
-            if (year % 400) {
-                return true;
-            } else {
-                return false;
-            }
+            return year % 400;
         }
-
         return true;
     }
-
     return false;
 };
 
@@ -67,13 +61,11 @@ var Table = React.createClass({
             tableRows.push(<tr key={"row_" + x}>{tableCols}</tr>);
         }
         return (
-            <div>
-                <table>
-                    <tbody>
-                    {tableRows}
-                    </tbody>
-                </table>
-            </div>
+            <table style={{marginLeft: "auto", marginRight: "auto"}}>
+                <tbody>
+                {tableRows}
+                </tbody>
+            </table>
         );
     }
 });

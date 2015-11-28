@@ -27,6 +27,10 @@ var daysInMonth = function (month, year) {
 
 // TODO: Refactor this code to make it cleaner
 var Table = React.createClass({
+    isToday: function (year, month, day) {
+        var today = this.props.today;
+        return today.getFullYear() === year && today.getMonth() === month && today.getDate() === day;
+    },
     render: function () {
         var month = this.props.date.getMonth();
         var year = this.props.date.getFullYear();
@@ -52,7 +56,8 @@ var Table = React.createClass({
                 if (startingDayOfWeek == y) {
                     start = true;
                 }
-                tableCols.push(<td key={"col_" + y}>{ start  && !stop ? day : ""}</td>);
+                tableCols.push(<td key={"col_" + y}
+                                   className={ this.isToday(year, month, day) ? "today" : ""}>{ start  && !stop ? day : ""}</td>);
                 if (start) {
                     day++;
                 }

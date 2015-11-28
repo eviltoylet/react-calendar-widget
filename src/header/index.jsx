@@ -1,10 +1,5 @@
 'use strict';
-var inlineStyle = {
-    display: "inline-block"
-};
 
-
-// TODO: Split out the year and the month?
 var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 var React = require('react');
 var Header = React.createClass({
@@ -13,6 +8,7 @@ var Header = React.createClass({
         var year = this.props.date.getFullYear();
         return (
             <div>
+                {/* TODO: Add some sort of selection when month / year are clicked? */}
                 <div className="calendar-year-month">
                     {months[month] + " " + year}
                 </div>

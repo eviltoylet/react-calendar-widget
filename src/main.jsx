@@ -35,7 +35,7 @@ var CalendarWidget = React.createClass({
         return (
             <div style={{textAlign: "center", display:"inline-block"}}>
                 <Header date={this.state.date} updateDate={updateDate} resetToToday={resetToToday}/>
-                <Table date={this.state.date}/>
+                <Table date={this.state.date} today={this.state.today}/>
             </div>
         );
     }

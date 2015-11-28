@@ -4,14 +4,23 @@ var React = require('react');
 var Header = require('./header/');
 var Table = require('./table/');
 
+var noop = function () {
+};
+
 var CalendarWidget = React.createClass({
     getInitialState: function () {
         var today = new Date();
         var date = today;
         return {
+            callbacks: {
+                onDaySelect: this.props.onDaySelect || noop
+            },
             today: today,
             date: date
         }
+    },
+    componentDidMount: function () {
+        this.state.callbacks.onDaySelect(this.state.today);
     },
     render: function () {
         var that = this;
@@ -35,7 +44,7 @@ var CalendarWidget = React.createClass({
         return (
             <div style={{textAlign: "center", display:"inline-block"}}>
                 <Header date={this.state.date} updateDate={updateDate} resetToToday={resetToToday}/>
-                <Table date={this.state.date} today={this.state.today}/>
+                <Table date={this.state.date} today={this.state.today} onDaySelect={this.state.callbacks.onDaySelect}/>
             </div>
         );
     }

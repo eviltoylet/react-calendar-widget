@@ -21,7 +21,9 @@
     "url": "https://github.com/eviltoylet/react-calendar-widget/issues"
   },
   "homepage": "https://github.com/eviltoylet/react-calendar-widget#readme",
-  "dependencies": {},
+  "dependencies": {
+    "classnames": "^2.2.1"
+  },
   "devDependencies": {
     "jsx-loader": "^0.13.2",
     "react": "^0.14.3",

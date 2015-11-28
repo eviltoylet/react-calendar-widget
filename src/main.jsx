@@ -10,11 +10,13 @@ var noop = function () {
 var CalendarWidget = React.createClass({
     getInitialState: function () {
         var today = new Date();
+        var selectedDate = null;
         var date = today;
         return {
             callbacks: {
                 onDaySelect: this.props.onDaySelect || noop
             },
+            selectedDate: selectedDate,
             today: today,
             date: date
         }
@@ -23,28 +25,36 @@ var CalendarWidget = React.createClass({
         this.state.callbacks.onDaySelect(this.state.today);
     },
     render: function () {
-        var that = this;
+        var self = this;
         var updateDate = function (year, month, day) {
             var existingYear = that.state.date.getFullYear();
             var existingMonth = that.state.date.getMonth();
             var existingDay = that.state.date.getDate();
 
             var date = new Date(year == null ? existingYear : year, month == null ? existingMonth : month, day == null ? existingDay : day);
-            that.setState({
+            self.setState({
                 date: date
             });
         };
 
         var resetToToday = function () {
-            that.setState({
-                date: that.state.today
+            self.setState({
+                date: self.state.today
             });
+        };
+
+        var onDaySelect = function (date) {
+            self.setState({
+                selectedDate: date
+            });
+            self.state.callbacks.onDaySelect(date);
         };
 
         return (
             <div style={{textAlign: "center", display:"inline-block"}}>
                 <Header date={this.state.date} updateDate={updateDate} resetToToday={resetToToday}/>
-                <Table date={this.state.date} today={this.state.today} onDaySelect={this.state.callbacks.onDaySelect}/>
+                <Table date={this.state.date} today={this.state.today} selectedDate={this.state.selectedDate}
+                       onDaySelect={onDaySelect}/>
             </div>
         );
     }

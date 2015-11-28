@@ -1,4 +1,5 @@
 var React = require('react');
+var classNames = require('classnames');
 
 // https://cs.uwaterloo.ca/~alopez-o/math-faq/node73.html
 var dayOfWeekForFirstDateInMonth = function (month, year) {
@@ -31,6 +32,14 @@ var Table = React.createClass({
         var today = this.props.today;
         return today.getFullYear() === year && today.getMonth() === month && today.getDate() === day;
     },
+    isSelected: function (year, month, day) {
+        var selectedDate = this.props.selectedDate;
+        if (!selectedDate) {
+            return false;
+        } else {
+            return selectedDate.getFullYear() === year && selectedDate.getMonth() === month && selectedDate.getDate() === day;
+        }
+    },
     render: function () {
         var month = this.props.date.getMonth();
         var year = this.props.date.getFullYear();
@@ -57,7 +66,7 @@ var Table = React.createClass({
                     start = true;
                 }
                 tableCols.push(<td key={"col_" + y}
-                                   className={ this.isToday(year, month, day) ? "today" : ""}
+                                   className={ classNames({today: this.isToday(year, month, day), selected: this.isSelected(year,month, day)})}
                                    style={{cursor: "pointer"}}
                                    onClick={this.props.onDaySelect.bind(this, new Date(year, month, day))}>{ start  && !stop ? day : ""}</td>);
                 if (start) {

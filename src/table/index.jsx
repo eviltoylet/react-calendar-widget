@@ -28,12 +28,14 @@ var daysInMonth = function (month, year) {
 // TODO: Refactor this code to make it cleaner
 var Table = React.createClass({
     render: function () {
-        var startingDayOfWeek = dayOfWeekForFirstDateInMonth(this.props.month, this.props.year);
+        var month = this.props.date.getMonth();
+        var year = this.props.date.getFullYear();
+        var startingDayOfWeek = dayOfWeekForFirstDateInMonth(month, year);
         var day = 1;
         var start = false;
         var stop = false;
         var tableRows = [];
-        var numberOfDays = daysInMonth(this.props.month, this.props.year);
+        var numberOfDays = daysInMonth(month, year);
         tableRows.push(
             <tr>
                 <td>S</td>

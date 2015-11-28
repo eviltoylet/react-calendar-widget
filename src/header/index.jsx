@@ -9,31 +9,40 @@ var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'A
 var React = require('react');
 var Header = React.createClass({
     render: function () {
+        var month = this.props.date.getMonth();
+        var year = this.props.date.getFullYear();
         return (
             <div>
-                <div className="calendar-year">
-                    <div className="calendar-year-prev"
-                         style={{display: "block", float: "left"}}
-                         onClick={this.props.updateDate.bind(this, this.props.year - 1, this.props.month, null)}>&lt;</div>
-                    <div className="calendar-year-text"
-                         style={inlineStyle}>
-                        {this.props.year}
-                    </div>
-                    <div className="calendar-year-next"
-                         style={{display: "block", float: "right"}}
-                         onClick={this.props.updateDate.bind(this, this.props.year +1, this.props.month, null)}>&gt;</div>
+                <div className="calendar-year-month">
+                    {months[month] + " " + year}
                 </div>
-                <div className="calendar-month">
-                    <div className="calendar-month-prev"
-                         style={{display: "block", float: "left"}}
-                         onClick={this.props.updateDate.bind(this, this.props.year, this.props.month - 1, null)}>&lt;</div>
-                    <div className="calendar-month-text"
-                         style={inlineStyle}>
-                        {months[this.props.month]}
+                <div className="calendar-navigation">
+                    <div className="calendar-year-prev"
+                         style={{display: "inline-block", float: "left"}}
+                         onClick={this.props.updateDate.bind(this, year - 1, month, null)}>«
                     </div>
+                    <div className="calendar-month-prev"
+                         style={{display: "inline-block", float: "left"}}
+                         onClick={this.props.updateDate.bind(this, year, month - 1, null)}>‹
+                    </div>
+
+                    <div className="calendar-today"
+                         onClick={this.props.resetToToday}
+                         style={{display: "inline-block"}}>
+                        Today
+                    </div>
+
+                    <div className="calendar-year-next"
+                         style={{display: "inline-block", float: "right"}}
+                         onClick={this.props.updateDate.bind(this, year +1, month, null)}>»
+                    </div>
+
                     <div className="calendar-month-next"
-                         style={{display: "block", float: "right"}}
-                         onClick={this.props.updateDate.bind(this, this.props.year, this.props.month + 1, null)}>&gt;</div>
+                         style={{display: "inline-block", float: "right"}}
+                         onClick={this.props.updateDate.bind(this, year, month + 1, null)}>›
+                    </div>
+
+
                 </div>
             </div>
         );

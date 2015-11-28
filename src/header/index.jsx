@@ -14,27 +14,27 @@ var Header = React.createClass({
                 </div>
                 <div className="calendar-navigation">
                     <div className="calendar-year-prev"
-                         style={{display: "inline-block", float: "left"}}
+                         style={{display: "inline-block", float: "left", cursor: "pointer"}}
                          onClick={this.props.updateDate.bind(this, year - 1, month, null)}>«
                     </div>
                     <div className="calendar-month-prev"
-                         style={{display: "inline-block", float: "left"}}
+                         style={{display: "inline-block", float: "left", cursor: "pointer"}}
                          onClick={this.props.updateDate.bind(this, year, month - 1, null)}>‹
                     </div>
 
                     <div className="calendar-today"
                          onClick={this.props.resetToToday}
-                         style={{display: "inline-block"}}>
+                         style={{display: "inline-block", cursor: "pointer"}}>
                         Today
                     </div>
 
                     <div className="calendar-year-next"
-                         style={{display: "inline-block", float: "right"}}
+                         style={{display: "inline-block", float: "right", cursor: "pointer"}}
                          onClick={this.props.updateDate.bind(this, year +1, month, null)}>»
                     </div>
 
                     <div className="calendar-month-next"
-                         style={{display: "inline-block", float: "right"}}
+                         style={{display: "inline-block", float: "right", cursor: "pointer"}}
                          onClick={this.props.updateDate.bind(this, year, month + 1, null)}>›
                     </div>
 

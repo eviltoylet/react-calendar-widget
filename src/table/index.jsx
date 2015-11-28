@@ -58,6 +58,7 @@ var Table = React.createClass({
                 }
                 tableCols.push(<td key={"col_" + y}
                                    className={ this.isToday(year, month, day) ? "today" : ""}
+                                   style={{cursor: "pointer"}}
                                    onClick={this.props.onDaySelect.bind(this, new Date(year, month, day))}>{ start  && !stop ? day : ""}</td>);
                 if (start) {
                     day++;

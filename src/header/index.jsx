@@ -9,7 +9,8 @@ var Header = React.createClass({
         return (
             <div>
                 {/* TODO: Add some sort of selection when month / year are clicked? */}
-                <div className="calendar-year-month">
+                <div className="calendar-year-month"
+                     style={{backgroundColor: "#0066ff", color: "white", borderBottom: "1px solid black"}}>
                     {months[month] + " " + year}
                 </div>
                 <div className="calendar-navigation">

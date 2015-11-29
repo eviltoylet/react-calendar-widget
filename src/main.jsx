@@ -48,7 +48,7 @@ var CalendarWidget = React.createClass({
         };
 
         return (
-            <div style={{textAlign: "center", display:"inline-block"}}>
+            <div style={{textAlign: "center", display:"inline-block", border: "1px solid black"}}>
                 <Header date={this.state.date} updateDate={updateDate} resetToToday={resetToToday}/>
                 <Table date={this.state.date} today={this.state.today} selectedDate={this.state.selectedDate}
                        onDaySelect={onDaySelect}/>

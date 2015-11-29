@@ -26,6 +26,26 @@ var daysInMonth = function (month, year) {
     }
 };
 
+// TODO: Figure out a better paradigm for this
+var styles = {
+    today: {
+        border: "1px solid red",
+        cursor: "pointer"
+    },
+    selected: {
+        backgroundColor: "#ccccff",
+        cursor: "pointer"
+    },
+    todayAndSelected: {
+        border: "1px solid red",
+        backgroundColor: "#ccccff",
+        cursor: "pointer"
+    },
+    default: {
+        cursor: "pointer"
+    }
+};
+
 // TODO: Refactor this code to make it cleaner
 var Table = React.createClass({
     isToday: function (year, month, day) {
@@ -50,7 +70,7 @@ var Table = React.createClass({
         var tableRows = [];
         var numberOfDays = daysInMonth(month, year);
         tableRows.push(
-            <tr>
+            <tr style={{fontWeight: "bold"}}>
                 <td>S</td>
                 <td>M</td>
                 <td>T</td>
@@ -65,9 +85,23 @@ var Table = React.createClass({
                 if (startingDayOfWeek == y) {
                     start = true;
                 }
+                var styleName = "default";
+                if (this.isSelected(year, month, day)) {
+                    if (this.isToday(year, month, day)) {
+                        styleName = "todayAndSelected";
+                    } else {
+                        styleName = "selected";
+                    }
+                } else {
+                    if (this.isToday(year, month, day)) {
+                        styleName = "today";
+                    } else {
+                        styleName = "default";
+                    }
+                }
                 tableCols.push(<td key={"col_" + y}
                                    className={ classNames({today: this.isToday(year, month, day), selected: this.isSelected(year,month, day)})}
-                                   style={{cursor: "pointer"}}
+                                   style={styles[styleName]}
                                    onClick={this.props.onDaySelect.bind(this, new Date(year, month, day))}>{ start  && !stop ? day : ""}</td>);
                 if (start) {
                     day++;
@@ -79,7 +113,7 @@ var Table = React.createClass({
             tableRows.push(<tr key={"row_" + x}>{tableCols}</tr>);
         }
         return (
-            <table style={{marginLeft: "auto", marginRight: "auto"}}>
+            <table style={{marginLeft: "auto", marginRight: "auto", textAlign: "center"}}>
                 <tbody>
                 {tableRows}
                 </tbody>

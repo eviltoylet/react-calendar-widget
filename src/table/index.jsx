@@ -18,12 +18,10 @@ var isLeapYear = function (year) {
 };
 
 var daysInMonth = function (month, year) {
-    if (month == 1) {
-        var leapYear = isLeapYear(year);
-        return leapYear ? 29 : 28;
-    } else {
-        return month % 2 == 0 ? 31 : 30;
-    }
+    var monthStart = new Date(year, month, 1);
+    var monthEnd = new Date(year, month + 1, 1);
+    var monthLength = Math.round((monthEnd - monthStart) / (1000 * 60 * 60 * 24));
+    return monthLength;
 };
 
 // TODO: Figure out a better paradigm for this

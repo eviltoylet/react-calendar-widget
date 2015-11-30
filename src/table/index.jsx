@@ -7,16 +7,6 @@ var dayOfWeekForFirstDateInMonth = function (month, year) {
     return date.getDay();
 };
 
-var isLeapYear = function (year) {
-    if (year % 4 == 0) {
-        if (year % 100) {
-            return year % 400;
-        }
-        return true;
-    }
-    return false;
-};
-
 var daysInMonth = function (month, year) {
     var monthStart = new Date(year, month, 1);
     var monthEnd = new Date(year, month + 1, 1);

@@ -1,5 +1,5 @@
 var ReactDOM = require('react-dom');
-var CalendarWidget = require('../src/main');
+var CalendarWidget = require('../src');
 
 var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 var setText = function (date) {

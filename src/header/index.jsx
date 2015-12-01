@@ -15,11 +15,11 @@ var Header = React.createClass({
                 </div>
                 <div className="calendar-navigation">
                     <div className="calendar-year-prev"
-                         style={{display: "inline-block", float: "left", cursor: "pointer"}}
+                         style={{display: "inline-block", float: "left", cursor: "pointer", marginLeft: "2px"}}
                          onClick={this.props.updateDate.bind(this, year - 1, month, null)}>«
                     </div>
                     <div className="calendar-month-prev"
-                         style={{display: "inline-block", float: "left", cursor: "pointer"}}
+                         style={{display: "inline-block", float: "left", cursor: "pointer", marginLeft: "4px"}}
                          onClick={this.props.updateDate.bind(this, year, month - 1, null)}>‹
                     </div>
 
@@ -30,12 +30,12 @@ var Header = React.createClass({
                     </div>
 
                     <div className="calendar-year-next"
-                         style={{display: "inline-block", float: "right", cursor: "pointer"}}
+                         style={{display: "inline-block", float: "right", cursor: "pointer", marginRight: "2px"}}
                          onClick={this.props.updateDate.bind(this, year +1, month, null)}>»
                     </div>
 
                     <div className="calendar-month-next"
-                         style={{display: "inline-block", float: "right", cursor: "pointer"}}
+                         style={{display: "inline-block", float: "right", cursor: "pointer", marginRight: "4px"}}
                          onClick={this.props.updateDate.bind(this, year, month + 1, null)}>›
                     </div>
 

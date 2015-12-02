@@ -7,15 +7,10 @@ var dayOfWeekForFirstDateInMonth = function (month, year) {
     return date.getDay();
 };
 
-var daysInMonth = function (month, year) {
-    var monthStart = new Date(year, month, 1);
-    var monthEnd = new Date(year, month + 1, 1);
-    var monthLength = Math.round((monthEnd - monthStart) / (1000 * 60 * 60 * 24));
-    return monthLength;
-};
-
-// TODO: Figure out a better paradigm for this
 var styles = {
+    otherMonth: {
+        color: "#d3d3d3"
+    },
     today: {
         border: "1px solid red",
         cursor: "pointer"
@@ -24,18 +19,11 @@ var styles = {
         backgroundColor: "#ccccff",
         cursor: "pointer"
     },
-    todayAndSelected: {
-        border: "1px solid red",
-        backgroundColor: "#ccccff",
-        cursor: "pointer"
-    },
     default: {
         cursor: "pointer"
     }
 };
 
-// TODO: Refactor this code to make it cleaner
-// TODO: Add in last few days of previous month and first few days of the next month
 var Table = React.createClass({
     isToday: function (year, month, day) {
         var today = this.props.today;
@@ -53,11 +41,8 @@ var Table = React.createClass({
         var month = this.props.date.getMonth();
         var year = this.props.date.getFullYear();
         var startingDayOfWeek = dayOfWeekForFirstDateInMonth(month, year);
-        var day = 1;
-        var start = false;
-        var stop = false;
+        var day = 1 - startingDayOfWeek;
         var tableRows = [];
-        var numberOfDays = daysInMonth(month, year);
         tableRows.push(
             <tr key="daysOfWeek" style={{fontWeight: "bold"}}>
                 <td key="Sunday">S</td>
@@ -71,33 +56,33 @@ var Table = React.createClass({
         for (var x = 0; x < 6; x++) {
             var tableCols = [];
             for (var y = 0; y < 7; y++) {
-                if (startingDayOfWeek == y) {
-                    start = true;
+                var stylesToApply = ["default"];
+                if (this.isToday(year, month, day)) {
+                    stylesToApply.push("today");
                 }
-                var styleName = "default";
+
                 if (this.isSelected(year, month, day)) {
-                    if (this.isToday(year, month, day)) {
-                        styleName = "todayAndSelected";
-                    } else {
-                        styleName = "selected";
-                    }
-                } else {
-                    if (this.isToday(year, month, day)) {
-                        styleName = "today";
-                    } else {
-                        styleName = "default";
+                    stylesToApply.push("selected");
+                }
+
+                if (new Date(year, month, day).getMonth() !== month) {
+                    stylesToApply.push("otherMonth");
+                }
+
+                var style = {};
+                for (var styleNumber = 0; styleNumber < stylesToApply.length; styleNumber++) {
+                    var currentStyle = styles[stylesToApply[styleNumber]];
+                    for (var attribute in currentStyle) {
+                        style[attribute] = currentStyle[attribute];
                     }
                 }
+
+                var displayDay = new Date(year, month, day).getDate();
                 tableCols.push(<td key={"col_" + y}
                                    className={ classNames({today: this.isToday(year, month, day), selected: this.isSelected(year,month, day)})}
-                                   style={styles[styleName]}
-                                   onClick={this.props.onDaySelect.bind(this, new Date(year, month, day))}>{ start  && !stop ? day : ""}</td>);
-                if (start) {
-                    day++;
-                }
-                if (day > numberOfDays) {
-                    stop = true;
-                }
+                                   style={style}
+                                   onClick={this.props.onDaySelect.bind(this, new Date(year, month, day))}>{displayDay}</td>);
+                day++;
             }
             tableRows.push(<tr key={"row_" + x}>{tableCols}</tr>);
         }

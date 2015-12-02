@@ -42,6 +42,7 @@ var CalendarWidget = React.createClass({
 
         var onDaySelect = function (date) {
             self.setState({
+                date: date,
                 selectedDate: date
             });
             self.state.callbacks.onDaySelect(date);

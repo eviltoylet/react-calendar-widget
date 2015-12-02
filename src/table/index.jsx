@@ -35,6 +35,7 @@ var styles = {
 };
 
 // TODO: Refactor this code to make it cleaner
+// TODO: Add in last few days of previous month and first few days of the next month
 var Table = React.createClass({
     isToday: function (year, month, day) {
         var today = this.props.today;
@@ -58,14 +59,14 @@ var Table = React.createClass({
         var tableRows = [];
         var numberOfDays = daysInMonth(month, year);
         tableRows.push(
-            <tr style={{fontWeight: "bold"}}>
-                <td>S</td>
-                <td>M</td>
-                <td>T</td>
-                <td>W</td>
-                <td>T</td>
-                <td>F</td>
-                <td>S</td>
+            <tr key="daysOfWeek" style={{fontWeight: "bold"}}>
+                <td key="Sunday">S</td>
+                <td key="Monday">M</td>
+                <td key="Tuesday">T</td>
+                <td key="Wednesday">W</td>
+                <td key="Thursday">T</td>
+                <td key="Friday">F</td>
+                <td key="Saturday">S</td>
             </tr>);
         for (var x = 0; x < 6; x++) {
             var tableCols = [];

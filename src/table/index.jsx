@@ -12,7 +12,7 @@ var styles = {
         color: "#d3d3d3"
     },
     today: {
-        border: "1px solid red",
+        boxShadow: "inset 0px 0px 1px red",
         cursor: "pointer"
     },
     selected: {

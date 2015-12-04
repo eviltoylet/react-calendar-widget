@@ -64,17 +64,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	var CalendarWidget = React.createClass({displayName: "CalendarWidget",
+	    isWithinRange: function (date) {
+	        var lowerBound = this.state.range[0];
+	        var upperBound = this.state.range[1];
+
+	        return lowerBound <= date && date <= upperBound;
+	    },
 	    getInitialState: function () {
 	        var today = new Date();
 	        var selectedDate = null;
 	        var date = today;
+	        var range = this.props.range || [];
+	        // TODO: Consider if we'll actually need to use new Date(-8640000000000000)
+	        range[0] = range[0] || new Date(0);
+	        range[1] = range[1] || new Date(8640000000000000);
+	        range[0] = new Date(range[0].getFullYear(), range[0].getMonth(), range[0].getDate());
+	        range[1] = new Date(range[1].getFullYear(), range[1].getMonth(), range[1].getDate());
 	        return {
 	            callbacks: {
 	                onDaySelect: this.props.onDaySelect || noop
 	            },
 	            selectedDate: selectedDate,
 	            today: today,
-	            date: date
+	            date: date,
+	            range: range
 	        }
 	    },
 	    render: function () {
@@ -85,9 +98,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var existingDay = self.state.date.getDate();
 
 	            var date = new Date(year == null ? existingYear : year, month == null ? existingMonth : month, day == null ? existingDay : day);
-	            self.setState({
-	                date: date
-	            });
+
+	            if (self.isWithinRange(date)) {
+	                self.setState({
+	                    date: date
+	                });
+	            }
 	        };
 
 	        var resetToToday = function () {
@@ -97,7 +113,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 
 	        var onDaySelect = function (date) {
+	            if (!self.isWithinRange(date)) {
+	                return;
+	            }
+
 	            self.setState({
+	                date: date,
 	                selectedDate: date
 	            });
 	            self.state.callbacks.onDaySelect(date);
@@ -105,9 +126,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        return (
 	            React.createElement("div", {style: {textAlign: "center", display:"inline-block", border: "1px solid black"}}, 
-	                React.createElement(Header, {date: this.state.date, updateDate: updateDate, resetToToday: resetToToday}), 
+	                React.createElement(Header, {date: this.state.date, updateDate: updateDate, resetToToday: resetToToday, 
+	                        range: this.state.range}), 
 	                React.createElement(Table, {date: this.state.date, today: this.state.today, selectedDate: this.state.selectedDate, 
-	                       onDaySelect: onDaySelect})
+	                       onDaySelect: onDaySelect, range: this.state.range})
 	            )
 	        );
 	    }
@@ -129,10 +151,56 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 	var React = __webpack_require__(1);
+	var noop = function () {
+	};
+
+	// TODO: Instead of isWithinRange, use something else. This is currently disabling the previous year navigation a bit
+	// too premature.
 	var Header = React.createClass({displayName: "Header",
+	    isWithinRange: function (year, month) {
+	        var lowerBound = this.props.range[0];
+	        lowerBound = new Date(lowerBound.getFullYear(), lowerBound.getMonth());
+	        var upperBound = this.props.range[1];
+	        upperBound = new Date(upperBound.getFullYear(), upperBound.getMonth());
+
+	        var date = new Date(year, month);
+
+	        return lowerBound <= date && date <= upperBound;
+	    },
 	    render: function () {
 	        var month = this.props.date.getMonth();
 	        var year = this.props.date.getFullYear();
+
+	        var styles = {
+	            valid: {
+	                cursor: "pointer"
+	            },
+	            invalid: {
+	                color: "#d3d3d3",
+	                cursor: "not-allowed"
+	            }
+	        };
+
+	        var previousYear = noop;
+	        if (this.isWithinRange(year - 1, month)) {
+	            previousYear = this.props.updateDate.bind(this, year - 1, month, null);
+	        }
+
+	        var previousMonth = noop;
+	        if (this.isWithinRange(year, month - 1)) {
+	            previousMonth = this.props.updateDate.bind(this, year, month - 1, null);
+	        }
+
+	        var nextYear = noop();
+	        if (this.isWithinRange(year + 1, month)) {
+	            nextYear = this.props.updateDate.bind(this, year + 1, month, null);
+	        }
+
+	        var nextMonth = noop();
+	        if (this.isWithinRange(year + 1, month)) {
+	            nextMonth = this.props.updateDate.bind(this, year, month + 1, null);
+	        }
+
 	        return (
 	            React.createElement("div", null, 
 	                /* TODO: Add some sort of selection when month / year are clicked? */
@@ -143,11 +211,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                React.createElement("div", {className: "calendar-navigation"}, 
 	                    React.createElement("div", {className: "calendar-year-prev", 
 	                         style: {display: "inline-block", float: "left", cursor: "pointer", marginLeft: "2px"}, 
-	                         onClick: this.props.updateDate.bind(this, year - 1, month, null)}, "«"
+	                         onClick: previousYear}, "«"
 	                    ), 
 	                    React.createElement("div", {className: "calendar-month-prev", 
 	                         style: {display: "inline-block", float: "left", cursor: "pointer", marginLeft: "4px"}, 
-	                         onClick: this.props.updateDate.bind(this, year, month - 1, null)}, "‹"
+	                         onClick: previousMonth}, "‹"
 	                    ), 
 
 	                    React.createElement("div", {className: "calendar-today", 
@@ -158,12 +226,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	                    React.createElement("div", {className: "calendar-year-next", 
 	                         style: {display: "inline-block", float: "right", cursor: "pointer", marginRight: "2px"}, 
-	                         onClick: this.props.updateDate.bind(this, year +1, month, null)}, "»"
+	                         onClick: nextYear}, "»"
 	                    ), 
 
 	                    React.createElement("div", {className: "calendar-month-next", 
 	                         style: {display: "inline-block", float: "right", cursor: "pointer", marginRight: "4px"}, 
-	                         onClick: this.props.updateDate.bind(this, year, month + 1, null)}, "›"
+	                         onClick: nextMonth}, "›"
 	                    )
 
 
@@ -188,35 +256,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return date.getDay();
 	};
 
-	var daysInMonth = function (month, year) {
-	    var monthStart = new Date(year, month, 1);
-	    var monthEnd = new Date(year, month + 1, 1);
-	    var monthLength = Math.round((monthEnd - monthStart) / (1000 * 60 * 60 * 24));
-	    return monthLength;
-	};
-
-	// TODO: Figure out a better paradigm for this
 	var styles = {
+	    otherMonth: {
+	        color: "#d3d3d3"
+	    },
 	    today: {
-	        border: "1px solid red",
+	        boxShadow: "inset 0px 0px 1px red",
 	        cursor: "pointer"
 	    },
 	    selected: {
 	        backgroundColor: "#ccccff",
 	        cursor: "pointer"
 	    },
-	    todayAndSelected: {
-	        border: "1px solid red",
-	        backgroundColor: "#ccccff",
-	        cursor: "pointer"
-	    },
 	    default: {
 	        cursor: "pointer"
+	    },
+	    outOfRange: {
+	        backgroundColor: "#e3e3e3",
+	        cursor: "not-allowed"
 	    }
 	};
 
-	// TODO: Refactor this code to make it cleaner
 	var Table = React.createClass({displayName: "Table",
+	    isWithinRange: function (date) {
+	        var lowerBound = this.props.range[0];
+	        var upperBound = this.props.range[1];
+
+	        return lowerBound <= date && date <= upperBound;
+	    },
 	    isToday: function (year, month, day) {
 	        var today = this.props.today;
 	        return today.getFullYear() === year && today.getMonth() === month && today.getDate() === day;
@@ -233,51 +300,52 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var month = this.props.date.getMonth();
 	        var year = this.props.date.getFullYear();
 	        var startingDayOfWeek = dayOfWeekForFirstDateInMonth(month, year);
-	        var day = 1;
-	        var start = false;
-	        var stop = false;
+	        var day = 1 - startingDayOfWeek;
 	        var tableRows = [];
-	        var numberOfDays = daysInMonth(month, year);
 	        tableRows.push(
-	            React.createElement("tr", {style: {fontWeight: "bold"}}, 
-	                React.createElement("td", null, "S"), 
-	                React.createElement("td", null, "M"), 
-	                React.createElement("td", null, "T"), 
-	                React.createElement("td", null, "W"), 
-	                React.createElement("td", null, "T"), 
-	                React.createElement("td", null, "F"), 
-	                React.createElement("td", null, "S")
+	            React.createElement("tr", {key: "daysOfWeek", style: {fontWeight: "bold"}}, 
+	                React.createElement("td", {key: "Sunday"}, "S"), 
+	                React.createElement("td", {key: "Monday"}, "M"), 
+	                React.createElement("td", {key: "Tuesday"}, "T"), 
+	                React.createElement("td", {key: "Wednesday"}, "W"), 
+	                React.createElement("td", {key: "Thursday"}, "T"), 
+	                React.createElement("td", {key: "Friday"}, "F"), 
+	                React.createElement("td", {key: "Saturday"}, "S")
 	            ));
 	        for (var x = 0; x < 6; x++) {
 	            var tableCols = [];
 	            for (var y = 0; y < 7; y++) {
-	                if (startingDayOfWeek == y) {
-	                    start = true;
+	                var stylesToApply = ["default"];
+	                if (!this.isWithinRange(new Date(year, month, day))) {
+	                    stylesToApply.push("outOfRange");
 	                }
-	                var styleName = "default";
+
+	                if (this.isToday(year, month, day)) {
+	                    stylesToApply.push("today");
+	                }
+
 	                if (this.isSelected(year, month, day)) {
-	                    if (this.isToday(year, month, day)) {
-	                        styleName = "todayAndSelected";
-	                    } else {
-	                        styleName = "selected";
-	                    }
-	                } else {
-	                    if (this.isToday(year, month, day)) {
-	                        styleName = "today";
-	                    } else {
-	                        styleName = "default";
+	                    stylesToApply.push("selected");
+	                }
+
+	                if (new Date(year, month, day).getMonth() !== month) {
+	                    stylesToApply.push("otherMonth");
+	                }
+
+	                var style = {};
+	                for (var styleNumber = 0; styleNumber < stylesToApply.length; styleNumber++) {
+	                    var currentStyle = styles[stylesToApply[styleNumber]];
+	                    for (var attribute in currentStyle) {
+	                        style[attribute] = currentStyle[attribute];
 	                    }
 	                }
+
+	                var displayDay = new Date(year, month, day).getDate();
 	                tableCols.push(React.createElement("td", {key: "col_" + y, 
 	                                   className:  classNames({today: this.isToday(year, month, day), selected: this.isSelected(year,month, day)}), 
-	                                   style: styles[styleName], 
-	                                   onClick: this.props.onDaySelect.bind(this, new Date(year, month, day))},  start  && !stop ? day : ""));
-	                if (start) {
-	                    day++;
-	                }
-	                if (day > numberOfDays) {
-	                    stop = true;
-	                }
+	                                   style: style, 
+	                                   onClick: this.props.onDaySelect.bind(this, new Date(year, month, day))}, displayDay));
+	                day++;
 	            }
 	            tableRows.push(React.createElement("tr", {key: "row_" + x}, tableCols));
 	        }

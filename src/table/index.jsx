@@ -21,10 +21,20 @@ var styles = {
     },
     default: {
         cursor: "pointer"
+    },
+    outOfRange: {
+        backgroundColor: "#e3e3e3",
+        cursor: "not-allowed"
     }
 };
 
 var Table = React.createClass({
+    isWithinRange: function (date) {
+        var lowerBound = this.props.range[0];
+        var upperBound = this.props.range[1];
+
+        return lowerBound <= date && date <= upperBound;
+    },
     isToday: function (year, month, day) {
         var today = this.props.today;
         return today.getFullYear() === year && today.getMonth() === month && today.getDate() === day;
@@ -57,6 +67,10 @@ var Table = React.createClass({
             var tableCols = [];
             for (var y = 0; y < 7; y++) {
                 var stylesToApply = ["default"];
+                if (!this.isWithinRange(new Date(year, month, day))) {
+                    stylesToApply.push("outOfRange");
+                }
+
                 if (this.isToday(year, month, day)) {
                     stylesToApply.push("today");
                 }

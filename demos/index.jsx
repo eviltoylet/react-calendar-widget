@@ -13,3 +13,7 @@ ReactDOM.render(
     <CalendarWidget onDaySelect={setText}/>,
     document.getElementById('calendar')
 );
+ReactDOM.render(
+    <CalendarWidget onDaySelect={setText} range={[new Date(), null]}/>,
+    document.getElementById('calendarRange')
+);

@@ -17,4 +17,11 @@ ReactDOM.render(
     document.getElementById('calendar')
 );
 ```
-Note that you can provide a callback on the property `onDaySelect`.
+
+## Optional properties
+The following properties can be provided.
+- `onDaySelect`: a callback that receives the date that was selected.
+- `range`: a two element array (e.g. `[new Date(), null]`) which contains the start and end dates for which the calendar should be functional. If null is provided, there is no range set.
+
+## Known Issues
+- Year and month navigation when there's a range imposed is unintuitive for some cases.

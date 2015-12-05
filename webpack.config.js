@@ -4,6 +4,7 @@ var ROOT_PATH = path.resolve(__dirname);
 var TARGET = process.env.npm_lifecycle_event;
 var config = {
     paths: {
+        ghPages: path.join(ROOT_PATH, 'gh-pages'),
         demo: path.join(ROOT_PATH, 'demos'),
         dist: path.join(ROOT_PATH, 'dist')
     }
@@ -44,6 +45,14 @@ if (TARGET === 'start' || !TARGET) {
             path: config.paths.dist,
             filename: 'index.js',
             libraryTarget: 'umd'
+        }
+    });
+} else if (TARGET === 'generate-gh-pages' || TARGET === 'deploy-gh-pages') {
+    module.exports = merge(common, {
+        entry: './demos/index.jsx',
+        output: {
+            path: config.paths.ghPages,
+            filename: 'bundle.js'
         }
     });
 }

@@ -5,6 +5,8 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "webpack",
+    "generate-gh-pages": "webpack",
+    "deploy-gh-pages": "node ./lib/gh-pages.js",
     "start": "webpack-dev-server --display-error-details",
     "prepublish": "npm run build"
   },
@@ -27,6 +29,8 @@
     "classnames": "^2.2.1"
   },
   "devDependencies": {
+    "fs": "0.0.2",
+    "gh-pages": "^0.6.0",
     "jsx-loader": "^0.13.2",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",

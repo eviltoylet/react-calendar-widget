@@ -1,6 +1,8 @@
 # Node
 node_modules
 
+# GitHub Pages
+gh-pages
 
 # IntelliJ IDEA
 .idea

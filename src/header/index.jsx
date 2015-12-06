@@ -2,22 +2,9 @@
 
 var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 var React = require('react');
-var noop = function () {
-};
 
-// TODO: Instead of isWithinRange, use something else. This is currently disabling the previous year navigation a bit
-// too premature.
+// TODO: Determine where to put the logic to determine if the month navigation button should be disabled / grayed out.
 var Header = React.createClass({
-    isWithinRange: function (year, month) {
-        var lowerBound = this.props.range[0];
-        lowerBound = new Date(lowerBound.getFullYear(), lowerBound.getMonth());
-        var upperBound = this.props.range[1];
-        upperBound = new Date(upperBound.getFullYear(), upperBound.getMonth());
-
-        var date = new Date(year, month);
-
-        return lowerBound <= date && date <= upperBound;
-    },
     render: function () {
         var month = this.props.date.getMonth();
         var year = this.props.date.getFullYear();
@@ -32,25 +19,10 @@ var Header = React.createClass({
             }
         };
 
-        var previousYear = noop;
-        if (this.isWithinRange(year - 1, month)) {
-            previousYear = this.props.updateDate.bind(this, year - 1, month, null);
-        }
-
-        var previousMonth = noop;
-        if (this.isWithinRange(year, month - 1)) {
-            previousMonth = this.props.updateDate.bind(this, year, month - 1, null);
-        }
-
-        var nextYear = noop();
-        if (this.isWithinRange(year + 1, month)) {
-            nextYear = this.props.updateDate.bind(this, year + 1, month, null);
-        }
-
-        var nextMonth = noop();
-        if (this.isWithinRange(year + 1, month)) {
-            nextMonth = this.props.updateDate.bind(this, year, month + 1, null);
-        }
+        var previousYear = this.props.updateDate.bind(this, year - 1, month, null);
+        var previousMonth = this.props.updateDate.bind(this, year, month - 1, null);
+        var nextYear = this.props.updateDate.bind(this, year + 1, month, null);
+        var nextMonth = this.props.updateDate.bind(this, year, month + 1, null);
 
         return (
             <div>

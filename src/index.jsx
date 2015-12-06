@@ -14,6 +14,15 @@ var CalendarWidget = React.createClass({
 
         return lowerBound <= date && date <= upperBound;
     },
+    rangeLimitedDate: function (date) {
+        if (date > this.state.range[1]) {
+            date = this.state.range[1];
+        } else if (date < this.state.range[0]) {
+            date = this.state.range[0];
+        }
+
+        return date;
+    },
     getInitialState: function () {
         var today = new Date();
         var selectedDate = null;
@@ -42,12 +51,11 @@ var CalendarWidget = React.createClass({
             var existingDay = self.state.date.getDate();
 
             var date = new Date(year == null ? existingYear : year, month == null ? existingMonth : month, day == null ? existingDay : day);
+            date = self.rangeLimitedDate(date);
 
-            if (self.isWithinRange(date)) {
-                self.setState({
-                    date: date
-                });
-            }
+            self.setState({
+                date: date
+            });
         };
 
         var resetToToday = function () {

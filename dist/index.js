@@ -70,6 +70,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        return lowerBound <= date && date <= upperBound;
 	    },
+	    rangeLimitedDate: function (date) {
+	        if (date > this.state.range[1]) {
+	            date = this.state.range[1];
+	        } else if (date < this.state.range[0]) {
+	            date = this.state.range[0];
+	        }
+
+	        return date;
+	    },
 	    getInitialState: function () {
 	        var today = new Date();
 	        var selectedDate = null;
@@ -98,12 +107,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var existingDay = self.state.date.getDate();
 
 	            var date = new Date(year == null ? existingYear : year, month == null ? existingMonth : month, day == null ? existingDay : day);
+	            date = self.rangeLimitedDate(date);
 
-	            if (self.isWithinRange(date)) {
-	                self.setState({
-	                    date: date
-	                });
-	            }
+	            self.setState({
+	                date: date
+	            });
 	        };
 
 	        var resetToToday = function () {
@@ -151,22 +159,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 	var React = __webpack_require__(1);
-	var noop = function () {
-	};
 
-	// TODO: Instead of isWithinRange, use something else. This is currently disabling the previous year navigation a bit
-	// too premature.
+	// TODO: Determine where to put the logic to determine if the month navigation button should be disabled / grayed out.
 	var Header = React.createClass({displayName: "Header",
-	    isWithinRange: function (year, month) {
-	        var lowerBound = this.props.range[0];
-	        lowerBound = new Date(lowerBound.getFullYear(), lowerBound.getMonth());
-	        var upperBound = this.props.range[1];
-	        upperBound = new Date(upperBound.getFullYear(), upperBound.getMonth());
-
-	        var date = new Date(year, month);
-
-	        return lowerBound <= date && date <= upperBound;
-	    },
 	    render: function () {
 	        var month = this.props.date.getMonth();
 	        var year = this.props.date.getFullYear();
@@ -181,25 +176,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        };
 
-	        var previousYear = noop;
-	        if (this.isWithinRange(year - 1, month)) {
-	            previousYear = this.props.updateDate.bind(this, year - 1, month, null);
-	        }
-
-	        var previousMonth = noop;
-	        if (this.isWithinRange(year, month - 1)) {
-	            previousMonth = this.props.updateDate.bind(this, year, month - 1, null);
-	        }
-
-	        var nextYear = noop();
-	        if (this.isWithinRange(year + 1, month)) {
-	            nextYear = this.props.updateDate.bind(this, year + 1, month, null);
-	        }
-
-	        var nextMonth = noop();
-	        if (this.isWithinRange(year + 1, month)) {
-	            nextMonth = this.props.updateDate.bind(this, year, month + 1, null);
-	        }
+	        var previousYear = this.props.updateDate.bind(this, year - 1, month, null);
+	        var previousMonth = this.props.updateDate.bind(this, year, month - 1, null);
+	        var nextYear = this.props.updateDate.bind(this, year + 1, month, null);
+	        var nextMonth = this.props.updateDate.bind(this, year, month + 1, null);
 
 	        return (
 	            React.createElement("div", null, 

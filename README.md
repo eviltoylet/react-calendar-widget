@@ -24,4 +24,4 @@ The following properties can be provided.
 - `range`: a two element array (e.g. `[new Date(), null]`) which contains the start and end dates for which the calendar should be functional. If null is provided, there is no range set.
 
 ## Known Issues
-- Year and month navigation when there's a range imposed is unintuitive for some cases.
+- Year and month navigation shows no visual indication when it is disabled. 
